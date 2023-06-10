@@ -50,13 +50,26 @@ div {
 }
 #main {
 	/* background-color: yellow; */
-	width: 500px;
+	width: 1100px;
 	height: 1000px;
+
+	display: flex;
+
+	overflow: hidden;
 
 	margin: 50px auto;
 }
 
-#main > * {
+.zone {
+	width: 500px;
+	height: 1000px;
+
+	overflow: hidden;
+
+	margin: 50px 25px;
+}
+
+.zone > *{
 	background-color: var(--main-div-bg-color);
 	border-radius: 20px;
 
@@ -64,6 +77,7 @@ div {
 }
 
 #top-line {
+
 	overflow: hidden;
 
 	margin-bottom: 20px;
@@ -81,7 +95,6 @@ div {
 #time-area {
 	background-color: var(--main-bg-color);
 	border-radius: 20px;
-
 
 	float: right;
 	width: 180px;
@@ -112,21 +125,6 @@ div {
 
 	height: 85%;
 }
-
-
-#bus-area {
-	height: 200px;
-}
-#bus-content {
-	background-color: var(--main-bg-color);
-
-	border-radius: 20px;
-
-	margin: 5px 20px;
-
-	height: 70%;
-}
-
 .weather {
 
 	border-bottom: 5px solid var(--main-div-bg-color);
@@ -168,4 +166,35 @@ div {
 }
 .fore-weather {
 	opacity: 0.55;
+}
+
+#bus-area {
+	height: 200px;
+}
+#bus-content {
+	background-color: var(--main-bg-color);
+
+	border-radius: 20px;
+
+	margin: 5px 20px;
+
+	height: 70%;
+}
+
+#youtube-area {
+	height: 780px;
+	margin-top: 20px;
+}
+#youtube-content {
+	background-color: var(--main-bg-color);
+
+	border-radius: 20px;
+
+	margin: 5px 20px;
+
+	height: 92%;
+}
+
+iframe {
+	border-radius: 20px;
 }
