@@ -1,0 +1,171 @@
+:root {
+	--main-bg-color: aliceblue;
+	--main-div-bg-color: rgba(220, 230, 238, 0.549);
+	--main-font-color: gray;
+	--weather-min-tmp: rgb(94, 136, 234);
+	--weather-max-tmp: rgb(242, 73, 73);
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--main-bg-color: rgb(12, 15, 18);
+		--main-div-bg-color: rgba(43, 29, 46, 0.549);
+		--main-font-color: rgb(165, 107, 107);
+		--weather-min-tmp: rgb(78, 103, 161);
+		--weather-max-tmp: rgb(164, 50, 50);
+	}
+}
+
+* { 
+	margin:0; 
+	padding: 0;
+	
+	font-size: 25px;
+	color: var(--main-font-color);
+	font-family: 'Wallpoet', cursive;
+}
+body {
+	background-color: var(--main-bg-color);
+}
+li {
+	list-style: none;
+}
+a {
+	text-decoration: none;
+}
+img {
+	border: 0;
+}
+
+@keyframes blinking {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0.05;
+	}
+}
+
+div {
+	text-align: center;
+}
+#main {
+	/* background-color: yellow; */
+	width: 500px;
+	height: 1000px;
+
+	margin: 50px auto;
+}
+
+#main > * {
+	background-color: var(--main-div-bg-color);
+	border-radius: 20px;
+
+	padding: 6px;
+}
+
+#top-line {
+	overflow: hidden;
+
+	margin-bottom: 20px;
+}
+
+#date-area {
+	background-color: var(--main-bg-color);
+	border-radius: 20px;
+
+	float: left;
+	width: 280px;
+
+	padding: 3px;
+}
+#time-area {
+	background-color: var(--main-bg-color);
+	border-radius: 20px;
+
+
+	float: right;
+	width: 180px;
+
+	padding: 3px;
+}
+#time-area > span {
+	font-weight: bolder;
+
+	animation-name: blinking;
+	animation-duration: 0.5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+#weather-area {
+	height: 440px;
+
+	margin-bottom: 20px;
+}
+#weather-content {
+	background-color: var(--main-bg-color);
+	border-radius: 20px;
+
+	margin: 5px 20px;
+
+	padding: 15px;
+
+	height: 83%;
+}
+
+
+#bus-area {
+	height: 200px;
+}
+#bus-content {
+	background-color: var(--main-bg-color);
+
+	border-radius: 20px;
+
+	margin: 5px 20px;
+
+	height: 70%;
+}
+
+.weather {
+
+	border-bottom: 5px solid var(--main-div-bg-color);
+	border-top: 5px solid var(--main-div-bg-color);
+
+	width: 90%;
+	height: 80px;
+
+	margin: 18px auto;
+	padding: 5px;
+
+	background-color: var(--main-bg-color);
+}
+.weather * {
+	font-size: 20px;
+
+	text-align: left;
+}
+
+.tmp > span:nth-of-type(2) {
+	color: var(--weather-max-tmp);
+}
+.tmp > span:nth-of-type(4) {
+	color: var(--weather-min-tmp);
+}
+
+.weather-header {
+	text-align: center;
+	margin-bottom: 10px;
+}
+.weather-header > span:nth-of-type(3) {
+	animation-name: blinking;
+	animation-duration: 0.5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+.weather-header > * {
+	font-size: 24px;
+}
+.fore-weather {
+	opacity: 0.55;
+}
