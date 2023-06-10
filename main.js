@@ -48,6 +48,8 @@ TMX - 일 최고기온 - ℃
 */
 
 const getWeather = () => {
+	const searchParams = new URLSearchParams(location.search);
+
 	const date =  new Date();
 	
 	const base_times = ["0200", "0500", "0800", "1100", "1400", "1700", "2000", "2300"];
@@ -66,8 +68,8 @@ const getWeather = () => {
 	queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('XML'); /**/
 	queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(base_date); /**/
 	queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(base_time); /**/
-	queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('56'); /**/
-	queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('130'); /**/
+	queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(searchParams.get('nx') || 55); /**/
+	queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(searchParams.get('ny') || 125); /**/
 	
 	const req = $.ajax({
 		url: url + queryParams,
