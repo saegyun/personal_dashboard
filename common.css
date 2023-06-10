@@ -21,7 +21,7 @@
 	
 	font-size: 25px;
 	color: var(--main-font-color);
-	font-family: 'Wallpoet', cursive;
+	font-family: 'Wallpoet', sans-serif;
 }
 body {
 	background-color: var(--main-bg-color);
@@ -98,7 +98,7 @@ div {
 }
 
 #weather-area {
-	height: 440px;
+	height: 500px;
 
 	margin-bottom: 20px;
 }
@@ -110,7 +110,7 @@ div {
 
 	padding: 15px;
 
-	height: 83%;
+	height: 85%;
 }
 
 
@@ -133,7 +133,7 @@ div {
 	border-top: 5px solid var(--main-div-bg-color);
 
 	width: 90%;
-	height: 80px;
+	height: 100px;
 
 	margin: 18px auto;
 	padding: 5px;

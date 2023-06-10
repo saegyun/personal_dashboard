@@ -16,6 +16,10 @@ const sky = {
 	"4": "FADE",
 };
 
+const commonWeather = {
+	minTmp: "",
+	maxTmp: "",
+}
 const weathers = {};
 
 const changeToNight = () => {
@@ -80,20 +84,20 @@ const getWeather = () => {
 		const root = $(data);
 		const items = root.find("items")[0].children;
 		
-		const weatherInfo = {
-			minTmp: 0,
-			maxTmp: 0,
-			tmp: 0,
-			sky: "맑음",
-			rain: {
-				possibillity: 0,
-				type: 0,
-				amount: 0,
-			},
-			hum: 0,
-		};
-
 		for (const item of items) {
+			const time = $(item).find("fcstTime").text();
+			const weatherInfo = weathers[time] || {
+				tmp: 0,
+				sky: "맑음",
+				rain: {
+					possibillity: 0,
+					type: 0,
+					amount: 0,
+				},
+				hum: 0,
+			};
+		
+
 			switch($(item).find("category").text()) {
 				case "POP" : // 강수확률
 					weatherInfo.rain.possibillity = $(item).find("fcstValue").text() + "%";
@@ -111,10 +115,10 @@ const getWeather = () => {
 					weatherInfo.sky = sky[$(item).find("fcstValue").text()];
 					break;
 				case "TMN" : // 최저기온
-					weatherInfo.minTmp = $(item).find("fcstValue").text() + "℃";
+					commonWeather.minTmp = $(item).find("fcstValue").text() + "℃";
 					break;
 				case "TMX" : // 최고기온
-					weatherInfo.maxTmp = $(item).find("fcstValue").text() + "℃";
+					commonWeather.maxTmp = $(item).find("fcstValue").text() + "℃";
 					break;
 				case "TMP" : // 현재기온
 					weatherInfo.tmp = $(item).find("fcstValue").text() + "℃";
@@ -135,6 +139,36 @@ const getWeather = () => {
 
 	// xhr.send('');
 }
+
+const getWeatherIdx = (hour) => {
+	const weatherIdx = `${(hour <= 9 ? "0" : "") + (hour)}00`;
+	return weatherIdx;
+};
+
+const makeWeather = (weatherInfo, hour) => {
+	return `
+	<div class="weather-header">
+		<span>${weatherInfo.sky}</span>
+		<span>${ getWeatherIdx(hour).slice(0, 2) }</span>
+		<span> : </span>
+		<span>${ getWeatherIdx(hour).slice(2, 4) }</span>
+	</div>
+	<div class="tmp">
+		<span>TMP : ${weatherInfo.tmp} (</span> 
+		<span>${commonWeather.maxTmp}</span> 
+		<span>/</span> 
+		<span>${commonWeather.minTmp}</span> 
+		<span>)</span>
+		<br>
+		<span>HUM : ${weatherInfo.hum}</span>
+	</div>
+	<div class="rain">
+		<span>${weatherInfo.rain.possibillity} of </span>
+		<span>${weatherInfo.rain.type}</span>
+		<span>|</span>
+		<span>${weatherInfo.rain.amount}(mm/h)</span>
+	</div>`;
+};
 
 $(document).ready(() => {
 	// changeToDay();
@@ -166,98 +200,42 @@ $(document).ready(() => {
 		
 		const h = date.getHours() % 24;
 
-		const getWeatherIdx = (hour) => {
-			const weatherIdx = `${(hour <= 9 ? "0" : "") + (hour)}00`;
-			return weatherIdx;
-		};
-
-		const currentWeather = weathers[getWeatherIdx(date.getHours())];
-		const foreWeather = weathers[getWeatherIdx(date.getHours() + 1)];
-		const foreWeather2 = weathers[getWeatherIdx(date.getHours() + 8)];
-
-		$("#current-weather").html(`
-		<div class="weather-header">
-			<span>${currentWeather.sky}</span>
-			<span>${ getWeatherIdx(date.getHours()).slice(0, 2) }</span>
-			<span> : </span>
-			<span>${ getWeatherIdx(date.getHours()).slice(2, 4) }</span>
-		</div>
-		<div class="tmp">
-			<span>TMP : ${currentWeather.tmp} (</span> 
-			<span>${currentWeather.maxTmp}</span> 
-			<span>/</span> 
-			<span>${currentWeather.minTmp}</span> 
-			<span>)</span>
-		</div>
-		<div class="rain">
-			<span>${currentWeather.rain.possibillity} of </span>
-			<span>${currentWeather.rain.type}</span>
-			<span>|</span>
-			<span>${currentWeather.rain.amount}(mm/h)</span>
-		</div>
-		`);
-		if (foreWeather) {
-			$("#fore-weather").html(`
-			<div class="weather-header">
-				<span>${foreWeather.sky}</span>
-				<span>${ getWeatherIdx(date.getHours() + 1).slice(0, 2) }</span>
-				<span> : </span>
-				<span>${ getWeatherIdx(date.getHours() + 1).slice(2, 4) }</span>
-			</div>
-			<div class="tmp">
-				<span>TMP : ${foreWeather.tmp} (</span> 
-				<span>${foreWeather.maxTmp}</span> 
-				<span>/</span> 
-				<span>${foreWeather.minTmp}</span> 
-				<span>)</span>
-			</div>
-			<div class="rain">
-				<span>${foreWeather.rain.possibillity} of </span>
-				<span>${foreWeather.rain.type}</span>
-				<span>|</span>
-				<span>${foreWeather.rain.amount}(mm/h)</span>
-			</div>
-			`);
-		} else {
-			$("#fore-weather").html("");
-		}
-		if (foreWeather2) {
-			$("#fore-weather2").html(`
-			<div class="weather-header">
-				<span>${foreWeather2.sky}</span>
-				<span>${ getWeatherIdx(date.getHours() + 8).slice(0, 2) }</span>
-				<span> : </span>
-				<span>${ getWeatherIdx(date.getHours() + 8).slice(2, 4) }</span>
-			</div>
-			<div class="tmp">
-				<span>TMP : ${foreWeather2.tmp} (</span> 
-				<span>${foreWeather2.maxTmp}</span> 
-				<span>/</span> 
-				<span>${foreWeather2.minTmp}</span> 
-				<span>)</span>
-			</div>
-			<div class="rain">
-				<span>${foreWeather2.rain.possibillity} of </span>
-				<span>${foreWeather2.rain.type}</span>
-				<span>|</span>
-				<span>${foreWeather2.rain.amount}(mm/h)</span>
-			</div>
-			`);
-		} else {
-			$("#fore-weather2").html("");
+		if (h == 11 || h == 23) {
+			window.location.reload();
 		}
 
-		// if (isDay) {
-		// 	if (h < 7 || h > 21) {
-		// 		isDay = !isDay;
-		// 		changeToNight();
-		// 	}
-		// } else {
-		// 	if (h > 7 && h < 21) {
-		// 		isDay = !isDay;
-		// 		changeToDay();
-		// 	}
-		// }
+		try {
+			const currentWeather = weathers[getWeatherIdx(date.getHours())];
+			const foreWeather = weathers[getWeatherIdx(date.getHours() + 1)];
+			const foreWeather2 = weathers[getWeatherIdx(date.getHours() + 8)];
+	
+			$("#current-weather").html(makeWeather(currentWeather, date.getHours()));
+			if (foreWeather) {
+				$("#fore-weather").html(makeWeather(foreWeather, date.getHours() + 1));
+			} else {
+				$("#fore-weather").html("");
+			}
+			if (foreWeather2) {
+				$("#fore-weather2").html(makeWeather(foreWeather2, date.getHours() + 8));
+			} else {
+				$("#fore-weather2").html("");
+			}
+		} catch(e) {
+
+		}
+		
+
+		if (isDay) {
+			if (h < 7 || h > 21) {
+				isDay = !isDay;
+				changeToNight();
+			}
+		} else {
+			if (h >= 7 && h <= 21) {
+				isDay = !isDay;
+				changeToDay();
+			}
+		}
 
 		let week = WEEKDAY[date.getDay()];
 
@@ -269,10 +247,10 @@ $(document).ready(() => {
 		});
 
 		$("#time-area").html(
-			`${date.getHours()} <span style="color: ${timeColor}">:</span> ${date.getMinutes()} <span style="color: ${timeColor}">:</span> ${date.getSeconds()}`
+			`${date.getHours().toString().padStart(2, "0")} <span style="color: ${timeColor}">:</span> ${date.getMinutes().toString().padStart(2, "0")} <span style="color: ${timeColor}">:</span> ${date.getSeconds().toString().padStart(2, "0")}`
 		);
 		$("#date-area").html(
-			`${week} / ${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
+			`${week} / ${date.getFullYear()}.${(date.getMonth() + 1).toString().padStart(2, "0")}.${date.getDate().toString().padStart(2, "0")}`
 		);
 	}, 1000);
 });
