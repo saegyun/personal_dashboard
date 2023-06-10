@@ -61,7 +61,7 @@ const getWeather = () => {
 	console.log(base_date)
 	console.log(base_time);
 	var xhr = new XMLHttpRequest();
-	var url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'; /*URL*/
+	var url = 'https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'; /*URL*/
 	var queryParams = '?' + encodeURIComponent('serviceKey') + '='+'Xm8JMazwsEBSMrl3re23y%2FTJbo5nvUG1LsYeNx7mpOaPLS5lXotXFm7x%2FjozwC4XGLHi4Hg%2BRlOLD90opRcuZw%3D%3D'; /*Service Key*/
 	queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /**/
 	queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('1000'); /**/
