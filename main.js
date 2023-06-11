@@ -197,12 +197,6 @@ $(document).ready(() => {
 
 	setInterval(() => {
 		const date = new Date();
-		
-		const h = date.getHours() % 24;
-
-		if (h == 11 || h == 23) {
-			window.location.reload();
-		}
 
 		try {
 			const currentWeather = weathers[getWeatherIdx(date.getHours())];
