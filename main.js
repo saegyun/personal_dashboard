@@ -1,4 +1,5 @@
 let isDay = false;
+let busToChk = "082";
 
 const pty = {
 	"0": "RAIN",
@@ -170,6 +171,58 @@ const makeWeather = (weatherInfo, hour) => {
 	</div>`;
 };
 
+const getStopIds = async (keyword) => {
+	let result;
+
+	var url = "https://www.gbis.go.kr/gbis2014/schBusAPI.action";
+	var data = 'cmd=searchAllJson';
+	data += '&searchKeyword=' + keyword; // 새암공원
+	data += '&pageOfRoute=' + 1; // 1
+	data += '&pageOfBus=' + 1; // 1
+	data += '&pageOfSubway=' + 1; // 1
+	data += '&pageOfPOI=' + 1;
+	data += '&routeNameType=' + "string"; // string
+
+	await $.ajax({
+		type: "post",
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		dataType: "json",
+		url: url,
+		data: data,
+		success: (data) => {
+			result = data.result.busStation.list
+		},
+		error: (err) => {
+			result = undefined;
+		},
+	});
+	return result;
+};
+
+const getBus = async (id) => {
+	var url = "https://www.gbis.go.kr/gbis2014/schBusAPI.action";
+	var data = 'cmd=searchBusStationJson';
+	data += '&stationId=' + id;
+
+	let result;
+	
+	await $.ajax({
+		type: "post",
+		contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+		dataType: "json",
+		url: url,
+		data: data,
+		success: (data) => {
+			result = data;
+		},
+		error: (err) => {
+			console.log(err);
+		}
+	});
+
+	return result;
+}
+
 $(document).ready(() => {
 	// changeToDay();
 	changeToNight();
@@ -195,6 +248,46 @@ $(document).ready(() => {
 
 
 	setInterval(getWeather, 1000 * 3600 * 3);
+
+	setInterval(async () => {
+		const stops = await getStopIds("빌라모리안");
+		const finalInfo = [];
+
+		if (stops.length == 0) {
+			return;
+		}
+
+		for (const stop of stops) {
+			console.log();
+
+			const result = (await getBus(stop.stationId)).result;
+			const arrivalInfo = result.busArrivalInfo;
+			const stationInfo = result.busStationInfo;
+
+			const midInfo = [];
+
+			for (let idx = 0; idx < arrivalInfo.length; idx++) {
+				const info = {
+					routeName: arrivalInfo[idx].routeName,
+					predictTime1: arrivalInfo[idx].predictTime1,
+					routeDestName: arrivalInfo[idx].routeDestName,
+				};
+
+				midInfo.push(info);
+			}
+			finalInfo.push(midInfo);
+		}
+
+		finalInfo.forEach((stopInfo, idx) => {
+			stopInfo.forEach(bus => {
+				if (bus.routeName == busToChk) {
+					$("#bus-num").html(busToChk);
+					$(".bus-dest").eq(idx).html(bus.routeDestName);
+					$(".bus-remain").eq(idx).html(bus.predictTime1 ? bus.predictTime1 + "분" : "도착 정보 없음");
+				}
+			});
+		});
+	}, 3000);
 
 	setInterval(() => {
 		const date = new Date();

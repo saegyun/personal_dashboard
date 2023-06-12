@@ -45,6 +45,13 @@ img {
 	}
 }
 
+.blink {
+	animation-name: blinking;
+	animation-duration: 0.5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
 div {
 	text-align: center;
 }
@@ -178,6 +185,8 @@ div {
 
 	margin: 5px 20px;
 
+	padding: 10px;
+
 	height: 70%;
 }
 
@@ -198,3 +207,32 @@ div {
 iframe {
 	border-radius: 20px;
 }
+
+#bus-info {
+	display: flex;
+	flex-direction: row;
+
+	border-radius: 30px;
+
+	background-color: var(--main-div-bg-color);
+}
+#bus-num {
+	font-size: 60px;
+	line-height: 140px;
+	margin-left: 10px;
+	margin-right: 20px;
+
+	color: rgb(225, 89, 89);
+
+	border-right: 5px solid var(--main-bg-color);
+}
+
+.bus-info {
+	padding: 2px;
+	text-align: left;
+}
+.bus-dest {
+	font-weight: bold;
+	border-bottom: 2px solid;
+}
+
