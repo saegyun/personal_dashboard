@@ -193,10 +193,12 @@ $(document).ready(() => {
 
 	let timeColor = "red";
 
+
 	setInterval(getWeather, 1000 * 3600 * 3);
 
 	setInterval(() => {
 		const date = new Date();
+		const h = date.getHours() % 24;
 
 		try {
 			const currentWeather = weathers[getWeatherIdx(date.getHours())];
