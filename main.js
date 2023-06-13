@@ -1,5 +1,8 @@
+const searchParams = new URLSearchParams(location.search);
+
 let isDay = false;
-let busToChk = "082";
+let busToChk = searchParams.get('bus') || "80";
+let stop = searchParams.get('stop') || "새암공원";
 
 const pty = {
 	"0": "RAIN",
@@ -24,20 +27,10 @@ const commonWeather = {
 const weathers = {};
 
 const changeToNight = () => {
-	const root = $(":root")[0];
-	root.style.setProperty("--main-font-color", "rgb(165, 107, 107)");
-	root.style.setProperty("--main-bg-color", "rgb(12, 15, 18)");
-	root.style.setProperty("--main-div-bg-color", "rgb(43, 29, 46)");
-	root.style.setProperty("--weather-min-tmp", "rgb(78, 103, 161)");
-	root.style.setProperty("--weather-max-tmp", "rgb(164, 50, 50)");
+	document.documentElement.className = "dark";
 };
 const changeToDay = () => {
-	const root = $(":root")[0];
-	root.style.setProperty("--main-font-color", "gray");
-	root.style.setProperty("--main-bg-color", "aliceblue");
-	root.style.setProperty("--main-div-bg-color", "rgb(220, 230, 238)");
-	root.style.setProperty("--weather-min-tmp", "rgb(94, 136, 234)");
-	root.style.setProperty("--weather-max-tmp", "rgb(242, 73, 73)");
+	document.documentElement.className = "light";
 };
 
 /*
@@ -53,8 +46,6 @@ TMX - 일 최고기온 - ℃
 */
 
 const getWeather = () => {
-	const searchParams = new URLSearchParams(location.search);
-
 	const date =  new Date();
 	
 	const base_times = ["0200", "0500", "0800", "1100", "1400", "1700", "2000", "2300"];
@@ -250,7 +241,7 @@ $(document).ready(() => {
 	setInterval(getWeather, 1000 * 3600 * 3);
 
 	setInterval(async () => {
-		const stops = await getStopIds("빌라모리안");
+		const stops = await getStopIds(stop);
 		const finalInfo = [];
 
 		if (stops.length == 0) {
